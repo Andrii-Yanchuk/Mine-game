@@ -1,0 +1,111 @@
+.control-panel {
+  margin: 16px 0 16px 0;
+}
+
+.balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.balance__title {
+  font-size: 12px;
+}
+
+.balance__value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.bet {
+  margin-bottom: 16px;
+}
+
+.bet__title {
+  margin-bottom: 7px;
+  font-weight: 500;
+  font-size: 11px;
+  width: fit-content;
+}
+
+.bet__input {
+  height: 46px;
+  padding: 0 13px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: #070b12;
+  border: 1px solid #1f2937;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bet__currency {
+  font-size: 16px;
+}
+
+.bet__field {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.bet__buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.bet__quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bet__button,
+.mines__button {
+  height: 32px;
+  border: none;
+  border-radius: 11px;
+  background: #1c2333;
+  color: #8995aa;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.bet__button:hover,
+.mines__button:hover {
+  filter: brightness(1.1);
+}
+
+.bet__button--active,
+.mines__button--active {
+  background: #3b82f6;
+  color: white;
+}
+
+.mines__title {
+  margin-bottom: 7px;
+  color: #8995aa;
+  font-weight: 700;
+  font-size: 11px;
+  width: fit-content;
+}
+
+.mines__buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}

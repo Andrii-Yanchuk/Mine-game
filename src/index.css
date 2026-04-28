@@ -64,3 +64,10 @@
 p {
   margin: 0;
 }
+
+.container {
+  background: #111620;
+  border: 1px solid #1a1f2e;
+  border-radius: 14px;
+  padding: 17px;
+}
