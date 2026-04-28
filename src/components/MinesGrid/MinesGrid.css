@@ -1,4 +1,5 @@
 .grid {
+  margin-bottom: 12px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
@@ -12,8 +13,8 @@
 .grid__cell {
   aspect-ratio: 1 / 1; /* квадрат */
   border-radius: 12px;
-
-  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  border: 1px solid #252d3f;
+  background: #1a1f2e;
 
   cursor: pointer;
   transition: 0.2s;

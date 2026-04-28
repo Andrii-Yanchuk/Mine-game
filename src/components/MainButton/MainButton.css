@@ -1,0 +1,25 @@
+.main-button {
+  width: 100%;
+  height: 53px;
+  background: #22c55e;
+  border-radius: 14px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 300ms;
+}
+
+.main-button__title {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  color: white;
+}
+
+.main-button:hover {
+  background: #16a34a;
+}
