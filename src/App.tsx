@@ -7,6 +7,7 @@ function App() {
     <div>
       <History />
       <ControlPanel />
+      <MinesGrid />
     </div>
   );
 }
