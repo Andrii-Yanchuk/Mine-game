@@ -1,9 +1,10 @@
 import "./App.css";
+import { History } from "./components/History/History";
 
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
+      <History />
     </div>
   );
 }
