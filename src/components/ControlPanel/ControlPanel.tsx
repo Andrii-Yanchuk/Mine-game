@@ -2,6 +2,7 @@ import "./ControlPanel.css";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "../../api/client";
 import { useGameStore } from "../../store/gameStore";
+import { MOCK_GAME_STATS } from "../../data/mockData";
 
 export function ControlPanel() {
   const betAmount = useGameStore((state) => state.betAmount);
@@ -17,6 +18,7 @@ export function ControlPanel() {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
+
   return (
     <aside className="container control-panel">
       <div className="balance">
@@ -84,6 +86,40 @@ export function ControlPanel() {
               {value}
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="active-game">
+        <div className="active-game__row">
+          <span className="active-game__label">Current multiplier</span>
+          <span className="active-game__value active-game__value--profit">
+            {MOCK_GAME_STATS.currentMultiplier.toFixed(2)}x
+          </span>
+        </div>
+
+        <div className="active-game__row">
+          <span className="active-game__label">Profit</span>
+          <span
+            className={`active-game__value ${
+              MOCK_GAME_STATS.profit > 0 ? "active-game__value--profit" : ""
+            }`}
+          >
+            ${MOCK_GAME_STATS.profit.toFixed(2)}
+          </span>
+        </div>
+
+        <div className="active-game__row">
+          <span className="active-game__label">Gems found</span>
+          <span className="active-game__value">
+            {MOCK_GAME_STATS.gemsFound}
+          </span>
+        </div>
+
+        <div className="active-game__row">
+          <span className="active-game__label">Next multiplier</span>
+          <span className="active-game__value active-game__value--next-multiplier">
+            {MOCK_GAME_STATS.nextMultiplier.toFixed(2)}x
+          </span>
         </div>
       </div>
     </aside>

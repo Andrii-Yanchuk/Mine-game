@@ -2,6 +2,7 @@ import { BASE_URL } from "../constants/api";
 import type {
   BalanceResponse,
   CreateGamePayload,
+  CreateGameResponse,
   HistoryResponse,
 } from "../types/api";
 
@@ -44,14 +45,38 @@ export async function getHistory(): Promise<HistoryResponse> {
   return res.json();
 }
 
-export async function createGame(payload: CreateGamePayload) {
+async function getErrorMessage(res: Response, fallback: string) {
+  try {
+    const data = await res.json();
+
+    if (typeof data?.message === "string") {
+      return data.message;
+    }
+
+    if (typeof data?.error === "string") {
+      return data.error;
+    }
+  } catch {
+    // Ignore invalid or empty error responses and use the fallback below.
+  }
+
+  return fallback;
+}
+
+export async function createGame(
+  payload: CreateGamePayload,
+): Promise<CreateGameResponse> {
   const res = await fetch(`${BASE_URL}/api/games`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-player-id": getPlayerId(),
+    },
     body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
-    throw new Error("Failed to create game");
+    throw new Error(await getErrorMessage(res, "Failed to create game"));
   }
 
   return res.json();

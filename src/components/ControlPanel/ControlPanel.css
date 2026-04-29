@@ -109,3 +109,38 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
+
+.active-game {
+  margin-top: 16px;
+}
+
+.active-game__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.active-game__row + .active-game__row {
+  margin-top: 8px;
+}
+
+.active-game__label {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.active-game__value {
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.active-game__value--profit {
+  color: #22c55e;
+}
+
+.active-game__value--next-multiplier {
+  color: #9ca3af;
+}

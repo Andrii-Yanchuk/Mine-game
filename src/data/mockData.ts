@@ -21,3 +21,10 @@ export const Games = [
     profit: 30,
   },
 ];
+
+export const MOCK_GAME_STATS = {
+  currentMultiplier: 1.25,
+  profit: 25,
+  gemsFound: 2,
+  nextMultiplier: 1.42,
+};

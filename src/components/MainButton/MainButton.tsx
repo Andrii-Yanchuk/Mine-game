@@ -1,9 +1,111 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createGame, getBalance } from "../../api/client";
+import { useGameStore } from "../../store/gameStore";
+import type { BalanceResponse } from "../../types/api";
 import "./MainButton.css";
 
+const MAX_BET = 2500;
+const VALID_MINES_COUNTS = [1, 3, 5, 10, 15];
+
+function getStartGameValidationError(
+  betAmount: number,
+  minesCount: number,
+  balance?: number,
+) {
+  if (betAmount <= 0) {
+    return "Bet amount must be greater than 0.";
+  }
+
+  if (betAmount > MAX_BET) {
+    return `Max bet is $${MAX_BET}.`;
+  }
+
+  if (balance !== undefined && betAmount > balance) {
+    return "Bet amount cannot be greater than your balance.";
+  }
+
+  if (!VALID_MINES_COUNTS.includes(minesCount)) {
+    return "Invalid mines count.";
+  }
+
+  return null;
+}
+
 export function MainButton() {
+  const queryClient = useQueryClient();
+  const betAmount = useGameStore((state) => state.betAmount);
+  const minesCount = useGameStore((state) => state.minesCount);
+  const currentMultiplier = useGameStore((state) => state.currentMultiplier);
+  const isGameActive = useGameStore((state) => state.isGameActive);
+  const setActiveGame = useGameStore((state) => state.setActiveGame);
+
+  const { data: balanceData } = useQuery({
+    queryKey: ["balance"],
+    queryFn: getBalance,
+  });
+
+  const createGameMutation = useMutation({
+    mutationFn: createGame,
+    onSuccess: (game) => {
+      setActiveGame(game);
+      queryClient.setQueryData<BalanceResponse>(["balance"], {
+        balance: game.balance,
+      });
+      queryClient.invalidateQueries({ queryKey: ["history"] });
+    },
+  });
+
+  const validationError = getStartGameValidationError(
+    betAmount,
+    minesCount,
+    balanceData?.balance,
+  );
+
+  const handleStartGame = () => {
+    if (isGameActive) {
+      return;
+    }
+
+    if (validationError) {
+      return;
+    }
+
+    createGameMutation.mutate({
+      betAmount,
+      minesCount,
+    });
+  };
+
+  const cashOutAmount = betAmount * currentMultiplier;
+  const isDisabled =
+    createGameMutation.isPending || (!isGameActive && validationError !== null);
+  const className = `main-button ${isGameActive ? "main-button--cash-out" : ""}`;
+  const title = createGameMutation.isPending
+    ? "starting..."
+    : isGameActive
+      ? `cash out - $${cashOutAmount.toFixed(2)}`
+      : "start game";
+
   return (
-    <div className="main-button">
-      <p className="main-button__title">start game</p>
+    <div className="main-button-wrapper">
+      <button
+        className={className}
+        disabled={isDisabled}
+        onClick={handleStartGame}
+        type="button"
+      >
+        <p className="main-button__title">{title}</p>
+      </button>
+
+      {!isGameActive && validationError && (
+        <p className="main-button__error">{validationError}</p>
+      )}
+
+      {!validationError && createGameMutation.isError && (
+        <p className="main-button__error">
+          {createGameMutation.error.message}
+        </p>
+      )}
     </div>
   );
 }
