@@ -1,9 +1,12 @@
 import { BASE_URL } from "../constants/api";
 import type {
   BalanceResponse,
+  CashOutResponse,
   CreateGamePayload,
   CreateGameResponse,
   HistoryResponse,
+  RevealCellPayload,
+  RevealCellResponse,
 } from "../types/api";
 
 function getPlayerId() {
@@ -77,6 +80,42 @@ export async function createGame(
 
   if (!res.ok) {
     throw new Error(await getErrorMessage(res, "Failed to create game"));
+  }
+
+  return res.json();
+}
+
+export async function revealCell({
+  gameId,
+  ...payload
+}: RevealCellPayload & { gameId: string }): Promise<RevealCellResponse> {
+  const res = await fetch(`${BASE_URL}/api/games/${gameId}/reveal`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-player-id": getPlayerId(),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    throw new Error(await getErrorMessage(res, "Failed to reveal cell"));
+  }
+
+  return res.json();
+}
+
+export async function cashOutGame(gameId: string): Promise<CashOutResponse> {
+  const res = await fetch(`${BASE_URL}/api/games/${gameId}/cashout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-player-id": getPlayerId(),
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(await getErrorMessage(res, "Failed to cash out"));
   }
 
   return res.json();

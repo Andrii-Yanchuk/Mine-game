@@ -1,12 +1,15 @@
 import "./ControlPanel.css";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "../../api/client";
+import { VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
-import { MOCK_GAME_STATS } from "../../data/mockData";
 
 export function ControlPanel() {
   const betAmount = useGameStore((state) => state.betAmount);
   const minesCount = useGameStore((state) => state.minesCount);
+  const currentMultiplier = useGameStore((state) => state.currentMultiplier);
+  const nextMultiplier = useGameStore((state) => state.nextMultiplier);
+  const gemsFound = useGameStore((state) => state.gemsFound);
   const setBetAmount = useGameStore((state) => state.setBetAmount);
   const setMinesCount = useGameStore((state) => state.setMinesCount);
 
@@ -77,7 +80,7 @@ export function ControlPanel() {
         <p className="mines__title">MINES</p>
 
         <div className="mines__buttons">
-          {[1, 3, 5, 10, 15].map((value) => (
+          {VALID_MINES_COUNTS.map((value) => (
             <button
               key={value}
               onClick={() => setMinesCount(value)}
@@ -93,7 +96,7 @@ export function ControlPanel() {
         <div className="active-game__row">
           <span className="active-game__label">Current multiplier</span>
           <span className="active-game__value active-game__value--profit">
-            {MOCK_GAME_STATS.currentMultiplier.toFixed(2)}x
+            {currentMultiplier}x
           </span>
         </div>
 
@@ -101,24 +104,24 @@ export function ControlPanel() {
           <span className="active-game__label">Profit</span>
           <span
             className={`active-game__value ${
-              MOCK_GAME_STATS.profit > 0 ? "active-game__value--profit" : ""
+              betAmount * currentMultiplier - betAmount > 0
+                ? "active-game__value--profit"
+                : ""
             }`}
           >
-            ${MOCK_GAME_STATS.profit.toFixed(2)}
+            ${(betAmount * currentMultiplier - betAmount).toFixed(2)}
           </span>
         </div>
 
         <div className="active-game__row">
           <span className="active-game__label">Gems found</span>
-          <span className="active-game__value">
-            {MOCK_GAME_STATS.gemsFound}
-          </span>
+          <span className="active-game__value">{gemsFound}</span>
         </div>
 
         <div className="active-game__row">
           <span className="active-game__label">Next multiplier</span>
           <span className="active-game__value active-game__value--next-multiplier">
-            {MOCK_GAME_STATS.nextMultiplier.toFixed(2)}x
+            {nextMultiplier}x
           </span>
         </div>
       </div>

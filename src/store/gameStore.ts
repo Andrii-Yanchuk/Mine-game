@@ -7,7 +7,10 @@ export const useGameStore = create<GameStore>((set) => ({
   gameId: null,
   status: "idle",
   currentMultiplier: 1,
+  nextMultiplier: 1,
   revealedCells: [],
+  fullBoard: null,
+  gemsFound: 0,
   isGameActive: false,
   setBetAmount: (betAmount) => set({ betAmount }),
   setMinesCount: (minesCount) => set({ minesCount }),
@@ -18,15 +21,55 @@ export const useGameStore = create<GameStore>((set) => ({
       minesCount: game.minesCount,
       status: game.status,
       currentMultiplier: game.currentMultiplier,
+      nextMultiplier: game.currentMultiplier,
       revealedCells: game.revealedCells,
+      fullBoard: null,
+      gemsFound: 0,
       isGameActive: game.status === "active",
+    }),
+  setActiveGameFromHistory: (game) =>
+    set({
+      gameId: game.gameId,
+      betAmount: game.betAmount,
+      minesCount: game.minesCount,
+      status: "active",
+      currentMultiplier: game.multiplier,
+      nextMultiplier: game.multiplier,
+      revealedCells: [],
+      fullBoard: null,
+      gemsFound: game.gemsFound,
+      isGameActive: game.status === "active",
+    }),
+  setRevealResult: (result) =>
+    set((state) => ({
+      status: result.status,
+      currentMultiplier: result.currentMultiplier ?? state.currentMultiplier,
+      nextMultiplier:
+        result.nextMultiplier ??
+        result.currentMultiplier ??
+        state.nextMultiplier,
+      revealedCells: result.revealedCells ?? state.revealedCells,
+      fullBoard: result.fullBoard ?? (result.status === "active" ? null : state.fullBoard),
+      gemsFound: result.gemsFound ?? state.gemsFound,
+      isGameActive: result.status === "active",
+    })),
+  setCashOutResult: (result) =>
+    set({
+      status: result.status,
+      currentMultiplier: result.cashedOutMultiplier,
+      nextMultiplier: result.cashedOutMultiplier,
+      fullBoard: result.fullBoard,
+      isGameActive: false,
     }),
   clearGame: () =>
     set({
       gameId: null,
       status: "idle",
       currentMultiplier: 1,
+      nextMultiplier: 1,
       revealedCells: [],
+      fullBoard: null,
+      gemsFound: 0,
       isGameActive: false,
     }),
 }));

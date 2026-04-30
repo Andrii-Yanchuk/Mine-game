@@ -17,6 +17,8 @@
   background: #1a1f2e;
 
   cursor: pointer;
+  color: #ffffff;
+  font-size: 24px;
   transition: 0.2s;
 }
 
@@ -36,4 +38,11 @@
 .grid__cell--disabled {
   pointer-events: none;
   opacity: 0.6;
+}
+
+.grid__error {
+  margin: 0 0 12px;
+  color: #ef4444;
+  font-size: 13px;
+  text-align: center;
 }

@@ -19,6 +19,16 @@ export type HistoryResponse = {
 
 export type GameStatus = "idle" | "active" | "won" | "lost";
 
+export type RevealedCell = {
+  row: number;
+  col: number;
+  type: "gem" | "bomb";
+};
+
+export type BoardCell = "gem" | "mine";
+
+export type FullBoard = BoardCell[][];
+
 export type CreateGamePayload = {
   betAmount: number;
   minesCount: number;
@@ -30,6 +40,31 @@ export type CreateGameResponse = {
   betAmount: number;
   currentMultiplier: number;
   status: "active";
-  revealedCells: number[];
+  revealedCells: RevealedCell[];
+  balance: number;
+};
+
+export type RevealCellPayload = {
+  row: number;
+  col: number;
+};
+
+export type RevealCellResponse = {
+  result: "gem" | "bomb" | "mine";
+  currentMultiplier?: number;
+  revealedCells?: RevealedCell[];
+  status: "active" | "won" | "lost";
+  gemsFound?: number;
+  nextMultiplier?: number;
+  fullBoard?: FullBoard;
+  balance?: number;
+};
+
+export type CashOutResponse = {
+  status: "won";
+  cashedOutMultiplier: number;
+  winAmount: number;
+  profit: number;
+  fullBoard: FullBoard;
   balance: number;
 };

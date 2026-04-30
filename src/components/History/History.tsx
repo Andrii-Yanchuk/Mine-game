@@ -1,6 +1,8 @@
 import "./History.css";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getHistory } from "../../api/client";
+import { useGameStore } from "../../store/gameStore";
 import type { HistoryGame, HistoryResponse } from "../../types/api";
 
 const historyQuery = {
@@ -24,11 +26,27 @@ function getCardClass(game: HistoryGame) {
 }
 
 function formatCurrency(value: number) {
-  return `$${value.toFixed(2)}`;
+  return `$${value}`;
 }
 
 export function History() {
   const { data: games = [], isLoading, isError } = useQuery(historyQuery);
+  const gameId = useGameStore((state) => state.gameId);
+  const setActiveGameFromHistory = useGameStore(
+    (state) => state.setActiveGameFromHistory,
+  );
+
+  useEffect(() => {
+    if (gameId) {
+      return;
+    }
+
+    const activeGame = games.find((game) => game.status === "active");
+
+    if (activeGame) {
+      setActiveGameFromHistory(activeGame);
+    }
+  }, [gameId, games, setActiveGameFromHistory]);
 
   const content = (() => {
     if (isLoading) {
