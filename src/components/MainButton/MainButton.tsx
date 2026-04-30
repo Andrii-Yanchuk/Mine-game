@@ -54,7 +54,6 @@ export function MainButton() {
       queryClient.setQueryData<BalanceResponse>(["balance"], {
         balance: game.balance,
       });
-      queryClient.invalidateQueries({ queryKey: ["history"] });
     },
   });
 
