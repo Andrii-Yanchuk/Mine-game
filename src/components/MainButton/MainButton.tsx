@@ -35,6 +35,7 @@ export function MainButton() {
   const queryClient = useQueryClient();
   const betAmount = useGameStore((state) => state.betAmount);
   const gameId = useGameStore((state) => state.gameId);
+  const revealedCells = useGameStore((state) => state.revealedCells);
   const minesCount = useGameStore((state) => state.minesCount);
   const currentMultiplier = useGameStore((state) => state.currentMultiplier);
   const isGameActive = useGameStore((state) => state.isGameActive);
@@ -94,10 +95,12 @@ export function MainButton() {
   };
 
   const cashOutAmount = betAmount * currentMultiplier;
+  const canCashOut = revealedCells.length > 0;
   const isDisabled =
     createGameMutation.isPending ||
     cashOutMutation.isPending ||
     (isGameActive && !gameId) ||
+    (isGameActive && !canCashOut) ||
     (!isGameActive && validationError !== null);
   const className = `main-button ${isGameActive ? "main-button--cash-out" : ""}`;
   const title = createGameMutation.isPending
