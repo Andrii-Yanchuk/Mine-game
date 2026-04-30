@@ -8,7 +8,7 @@ export type HistoryGame = {
   minesCount: number;
   status: "active" | "won" | "lost" | "cashed_out";
   multiplier: number;
-  profit: number;
+  profit: number | null;
   gemsFound: number;
   createdAt: string;
 };

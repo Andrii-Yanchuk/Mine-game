@@ -70,6 +70,10 @@
   line-height: 18px;
 }
 
+.history_multiplier--bomb {
+  color: #ef4444;
+}
+
 .history_result {
   color: #64748b;
   font-size: 11px;

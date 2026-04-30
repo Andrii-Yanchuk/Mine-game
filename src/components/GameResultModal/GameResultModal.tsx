@@ -30,6 +30,9 @@ export function GameResultModal() {
       ? "game-result-modal__profit game-result-modal__profit--win"
       : "game-result-modal__profit game-result-modal__profit--loss";
   const profitPrefix = gameResultModal.profit > 0 ? "+" : "";
+  const displayedProfit = isWin
+    ? gameResultModal.profit
+    : Math.abs(gameResultModal.profit);
   const buttonText = isWin ? "PLAY AGAIN" : "TRY AGAIN";
 
   return (
@@ -62,7 +65,7 @@ export function GameResultModal() {
 
         <p className={profitClassName}>
           {profitPrefix}
-          {formatCurrency(gameResultModal.profit)} {isWin ? "profit" : "lost"}
+          {formatCurrency(displayedProfit)} {isWin ? "profit" : "lost"}
         </p>
 
         <button

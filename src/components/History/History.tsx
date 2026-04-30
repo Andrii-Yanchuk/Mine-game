@@ -10,7 +10,7 @@ const historyQuery = {
 };
 
 function getGameResult(game: HistoryGame) {
-  if (game.status === "lost") return "BUST";
+  if (game.status === "lost") return "LOST";
   if (game.status === "active") return "ACTIVE";
 
   return "WIN";
@@ -24,7 +24,23 @@ function getCardClass(game: HistoryGame) {
 }
 
 function formatCurrency(value: number) {
+  if (value < 0) {
+    return `-$${Math.abs(value)}`;
+  }
+
   return `$${value}`;
+}
+
+function getGameProfit(game: HistoryGame) {
+  if (game.status === "lost") {
+    return -Math.abs(game.profit ?? game.betAmount);
+  }
+
+  if (typeof game.profit === "number") {
+    return game.profit;
+  }
+
+  return 0;
 }
 
 export function History() {
@@ -45,7 +61,8 @@ export function History() {
 
     return games.map((game) => {
       const isLoss = game.status === "lost";
-      const profitPrefix = game.profit > 0 ? "+" : "";
+      const profit = getGameProfit(game);
+      const profitPrefix = profit > 0 ? "+" : "";
 
       return (
         <div
@@ -57,7 +74,7 @@ export function History() {
             <p className="history_bet">{formatCurrency(game.betAmount)}</p>
 
             {isLoss ? (
-              <p className="history_multiplier">BUST</p>
+              <p className="history_multiplier history_multiplier--bomb">💣</p>
             ) : (
               <p className="history_multiplier">{game.multiplier}x</p>
             )}
@@ -68,7 +85,7 @@ export function History() {
 
             <p className="history_profit">
               {profitPrefix}
-              {formatCurrency(game.profit)}
+              {formatCurrency(profit)}
             </p>
           </div>
         </div>
