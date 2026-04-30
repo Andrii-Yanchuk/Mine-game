@@ -12,6 +12,7 @@ export const useGameStore = create<GameStore>((set) => ({
   fullBoard: null,
   gemsFound: 0,
   isGameActive: false,
+  gameResultModal: null,
   setBetAmount: (betAmount) => set({ betAmount }),
   setMinesCount: (minesCount) => set({ minesCount }),
   setActiveGame: (game) =>
@@ -27,6 +28,7 @@ export const useGameStore = create<GameStore>((set) => ({
       fullBoard: null,
       gemsFound: "gemsFound" in game ? game.gemsFound : 0,
       isGameActive: game.status === "active",
+      gameResultModal: null,
     }),
   setRevealResult: (result) =>
     set((state) => ({
@@ -41,6 +43,15 @@ export const useGameStore = create<GameStore>((set) => ({
         result.fullBoard ?? (result.status === "active" ? null : state.fullBoard),
       gemsFound: result.gemsFound ?? state.gemsFound,
       isGameActive: result.status === "active",
+      gameResultModal:
+        result.status === "lost"
+          ? {
+              type: "loss",
+              multiplier: result.currentMultiplier ?? state.currentMultiplier,
+              amount: 0,
+              profit: -state.betAmount,
+            }
+          : state.gameResultModal,
     })),
   setCashOutResult: (result) =>
     set({
@@ -49,7 +60,14 @@ export const useGameStore = create<GameStore>((set) => ({
       nextMultiplier: result.cashedOutMultiplier,
       fullBoard: result.fullBoard,
       isGameActive: false,
+      gameResultModal: {
+        type: "win",
+        multiplier: result.cashedOutMultiplier,
+        amount: result.winAmount,
+        profit: result.profit,
+      },
     }),
+  closeGameResultModal: () => set({ gameResultModal: null }),
   clearGame: () =>
     set({
       gameId: null,
@@ -60,5 +78,6 @@ export const useGameStore = create<GameStore>((set) => ({
       fullBoard: null,
       gemsFound: 0,
       isGameActive: false,
+      gameResultModal: null,
     }),
 }));
