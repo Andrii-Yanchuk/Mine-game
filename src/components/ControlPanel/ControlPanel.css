@@ -2,6 +2,11 @@
   margin: 16px 0 16px 0;
 }
 
+.control-panel--active-game {
+  margin-bottom: 14px;
+  padding: 18px;
+}
+
 .balance {
   display: flex;
   justify-content: space-between;
@@ -58,6 +63,13 @@
   text-align: right;
 }
 
+@media (max-width: 767px) {
+  .bet__field {
+    pointer-events: none;
+    caret-color: transparent;
+  }
+}
+
 .bet__buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -90,6 +102,14 @@
   filter: brightness(1.1);
 }
 
+.mines__button:disabled {
+  cursor: default;
+}
+
+.mines__button:disabled:hover {
+  filter: none;
+}
+
 .bet__button--active,
 .mines__button--active {
   background: #3b82f6;
@@ -111,36 +131,32 @@
 }
 
 .active-game {
-  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin-top: 26px;
+  text-align: left;
 }
 
-.active-game__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.active-game__row + .active-game__row {
-  margin-top: 8px;
+.active-game__metric {
+  display: grid;
+  gap: 3px;
 }
 
 .active-game__label {
+  color: #6f7a8e;
   font-size: 12px;
   line-height: 16px;
 }
 
 .active-game__value {
   color: white;
-  font-size: 13px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 18px;
   font-weight: 700;
-  line-height: 18px;
+  line-height: 24px;
 }
 
 .active-game__value--profit {
   color: #22c55e;
-}
-
-.active-game__value--next-multiplier {
-  color: #9ca3af;
 }

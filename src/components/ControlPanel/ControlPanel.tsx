@@ -8,8 +8,7 @@ export function ControlPanel() {
   const betAmount = useGameStore((state) => state.betAmount);
   const minesCount = useGameStore((state) => state.minesCount);
   const currentMultiplier = useGameStore((state) => state.currentMultiplier);
-  const nextMultiplier = useGameStore((state) => state.nextMultiplier);
-  const gemsFound = useGameStore((state) => state.gemsFound);
+  const isGameActive = useGameStore((state) => state.isGameActive);
   const setBetAmount = useGameStore((state) => state.setBetAmount);
   const setMinesCount = useGameStore((state) => state.setMinesCount);
 
@@ -18,12 +17,17 @@ export function ControlPanel() {
     queryFn: getBalance,
   });
   const balance = data?.balance;
+  const profit = betAmount * currentMultiplier - betAmount;
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error</p>;
 
   return (
-    <aside className="container control-panel">
+    <aside
+      className={`container control-panel ${
+        isGameActive ? "control-panel--active-game" : ""
+      }`}
+    >
       <div className="balance">
         <p className="balance__title">Balance</p>
         <span className="balance__value">💰 ${balance}</span>
@@ -39,6 +43,7 @@ export function ControlPanel() {
             type="number"
             value={betAmount}
             onChange={(e) => setBetAmount(Number(e.target.value) || 0)}
+            inputMode="none"
           />
         </div>
 
@@ -47,7 +52,10 @@ export function ControlPanel() {
             <button
               key={value}
               onClick={() => setBetAmount(value)}
-              className={`bet__button ${value === betAmount ? "bet__button--active" : ""}`}
+              className={`bet__button ${
+                value === betAmount ? "bet__button--active" : ""
+              }`}
+              type="button"
             >
               ${value}
             </button>
@@ -58,18 +66,21 @@ export function ControlPanel() {
           <button
             className="bet__button"
             onClick={() => setBetAmount(betAmount / 2)}
+            type="button"
           >
             1/2
           </button>
           <button
             className="bet__button"
             onClick={() => setBetAmount(betAmount * 2)}
+            type="button"
           >
             x2
           </button>
           <button
             className="bet__button"
             onClick={() => setBetAmount(balance ?? 0)}
+            type="button"
           >
             Max
           </button>
@@ -84,7 +95,11 @@ export function ControlPanel() {
             <button
               key={value}
               onClick={() => setMinesCount(value)}
-              className={`mines__button ${value === minesCount ? "mines__button--active" : ""}`}
+              disabled={isGameActive}
+              className={`mines__button ${
+                value === minesCount ? "mines__button--active" : ""
+              }`}
+              type="button"
             >
               {value}
             </button>
@@ -92,39 +107,23 @@ export function ControlPanel() {
         </div>
       </div>
 
-      <div className="active-game">
-        <div className="active-game__row">
-          <span className="active-game__label">Current multiplier</span>
-          <span className="active-game__value active-game__value--profit">
-            {currentMultiplier}x
-          </span>
-        </div>
+      {isGameActive && (
+        <div className="active-game">
+          <div className="active-game__metric">
+            <span className="active-game__label">Multiplier</span>
+            <span className="active-game__value active-game__value--profit">
+              {currentMultiplier.toFixed(2)}x
+            </span>
+          </div>
 
-        <div className="active-game__row">
-          <span className="active-game__label">Profit</span>
-          <span
-            className={`active-game__value ${
-              betAmount * currentMultiplier - betAmount > 0
-                ? "active-game__value--profit"
-                : ""
-            }`}
-          >
-            ${(betAmount * currentMultiplier - betAmount).toFixed(2)}
-          </span>
+          <div className="active-game__metric">
+            <span className="active-game__label">Profit</span>
+            <span className="active-game__value active-game__value--profit">
+              +${profit.toFixed(2)}
+            </span>
+          </div>
         </div>
-
-        <div className="active-game__row">
-          <span className="active-game__label">Gems found</span>
-          <span className="active-game__value">{gemsFound}</span>
-        </div>
-
-        <div className="active-game__row">
-          <span className="active-game__label">Next multiplier</span>
-          <span className="active-game__value active-game__value--next-multiplier">
-            {nextMultiplier}x
-          </span>
-        </div>
-      </div>
+      )}
     </aside>
   );
 }
