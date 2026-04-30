@@ -1,5 +1,6 @@
 import { BASE_URL } from "../constants/api";
 import type {
+  ActiveGameResponse,
   BalanceResponse,
   CashOutResponse,
   CreateGamePayload,
@@ -43,6 +44,24 @@ export async function getHistory(): Promise<HistoryResponse> {
 
   if (!res.ok) {
     throw new Error("Failed to fetch history");
+  }
+
+  return res.json();
+}
+
+export async function getActiveGame(): Promise<ActiveGameResponse | null> {
+  const res = await fetch(`${BASE_URL}/api/games/active`, {
+    headers: {
+      "x-player-id": getPlayerId(),
+    },
+  });
+
+  if (res.status === 204 || res.status === 404) {
+    return null;
+  }
+
+  if (!res.ok) {
+    throw new Error(await getErrorMessage(res, "Failed to fetch active game"));
   }
 
   return res.json();

@@ -44,6 +44,17 @@ export type CreateGameResponse = {
   balance: number;
 };
 
+export type ActiveGameResponse = {
+  gameId: string;
+  minesCount: number;
+  betAmount: number;
+  currentMultiplier: number;
+  status: "active";
+  revealedCells: RevealedCell[];
+  gemsFound: number;
+  nextMultiplier: number;
+};
+
 export type RevealCellPayload = {
   row: number;
   col: number;

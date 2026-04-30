@@ -21,23 +21,11 @@ export const useGameStore = create<GameStore>((set) => ({
       minesCount: game.minesCount,
       status: game.status,
       currentMultiplier: game.currentMultiplier,
-      nextMultiplier: game.currentMultiplier,
+      nextMultiplier:
+        "nextMultiplier" in game ? game.nextMultiplier : game.currentMultiplier,
       revealedCells: game.revealedCells,
       fullBoard: null,
-      gemsFound: 0,
-      isGameActive: game.status === "active",
-    }),
-  setActiveGameFromHistory: (game) =>
-    set({
-      gameId: game.gameId,
-      betAmount: game.betAmount,
-      minesCount: game.minesCount,
-      status: "active",
-      currentMultiplier: game.multiplier,
-      nextMultiplier: game.multiplier,
-      revealedCells: [],
-      fullBoard: null,
-      gemsFound: game.gemsFound,
+      gemsFound: "gemsFound" in game ? game.gemsFound : 0,
       isGameActive: game.status === "active",
     }),
   setRevealResult: (result) =>
@@ -49,7 +37,8 @@ export const useGameStore = create<GameStore>((set) => ({
         result.currentMultiplier ??
         state.nextMultiplier,
       revealedCells: result.revealedCells ?? state.revealedCells,
-      fullBoard: result.fullBoard ?? (result.status === "active" ? null : state.fullBoard),
+      fullBoard:
+        result.fullBoard ?? (result.status === "active" ? null : state.fullBoard),
       gemsFound: result.gemsFound ?? state.gemsFound,
       isGameActive: result.status === "active",
     })),

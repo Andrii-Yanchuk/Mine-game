@@ -1,9 +1,9 @@
 import type {
+  ActiveGameResponse,
   CreateGameResponse,
   CashOutResponse,
   FullBoard,
   GameStatus,
-  HistoryGame,
   RevealCellResponse,
   RevealedCell,
 } from "./api";
@@ -21,8 +21,7 @@ export type GameStore = {
   isGameActive: boolean;
   setBetAmount: (betAmount: number) => void;
   setMinesCount: (minesCount: number) => void;
-  setActiveGame: (game: CreateGameResponse) => void;
-  setActiveGameFromHistory: (game: HistoryGame) => void;
+  setActiveGame: (game: ActiveGameResponse | CreateGameResponse) => void;
   setRevealResult: (result: RevealCellResponse) => void;
   setCashOutResult: (result: CashOutResponse) => void;
   clearGame: () => void;
