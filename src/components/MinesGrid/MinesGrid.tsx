@@ -1,9 +1,14 @@
 import "./MinesGrid.css";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { revealCell } from "../../api/client";
 import { useGameStore } from "../../store/gameStore";
 
 export function MinesGrid() {
+  const [pendingCell, setPendingCell] = useState<{
+    row: number;
+    col: number;
+  } | null>(null);
   const queryClient = useQueryClient();
   const gameId = useGameStore((state) => state.gameId);
   const revealedCells = useGameStore((state) => state.revealedCells);
@@ -14,6 +19,9 @@ export function MinesGrid() {
 
   const revealMutation = useMutation({
     mutationFn: revealCell,
+    onMutate: ({ row, col }) => {
+      setPendingCell({ row, col });
+    },
     onSuccess: (result, revealedCell) => {
       const revealedType = result.result === "mine" ? "bomb" : result.result;
       const nextRevealedCells = result.revealedCells ?? [
@@ -40,6 +48,9 @@ export function MinesGrid() {
         queryClient.invalidateQueries({ queryKey: ["balance"] });
         queryClient.invalidateQueries({ queryKey: ["history"] });
       }
+    },
+    onSettled: () => {
+      setPendingCell(null);
     },
   });
 
@@ -72,6 +83,8 @@ export function MinesGrid() {
           );
           const boardCell = fullBoard?.[row]?.[col];
           const cellType = boardCell === "mine" ? "bomb" : boardCell;
+          const isLoading =
+            pendingCell?.row === row && pendingCell?.col === col;
           const isDisabled =
             !isGameActive ||
             revealMutation.isPending ||
@@ -82,6 +95,7 @@ export function MinesGrid() {
             revealedCell ? `grid__cell--${revealedCell.type}` : "",
             cellType ? `grid__cell--${cellType}` : "",
             isDisabled ? "grid__cell--disabled" : "",
+            isLoading ? "grid__cell--loading" : "",
           ]
             .filter(Boolean)
             .join(" ");
@@ -94,8 +108,16 @@ export function MinesGrid() {
               onClick={() => handleCellClick(index)}
               type="button"
             >
-              {(revealedCell?.type === "gem" || cellType === "gem") && "G"}
-              {(revealedCell?.type === "bomb" || cellType === "bomb") && "!"}
+              {isLoading ? (
+                <span className="grid__spinner" aria-hidden="true" />
+              ) : (
+                <>
+                  {(revealedCell?.type === "gem" || cellType === "gem") &&
+                    "💎"}
+                  {(revealedCell?.type === "bomb" || cellType === "bomb") &&
+                    "💣"}
+                </>
+              )}
             </button>
           );
         })}
