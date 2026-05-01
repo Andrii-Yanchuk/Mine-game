@@ -6,7 +6,8 @@ import type { HistoryGame, HistoryResponse } from "../../types/api";
 const historyQuery = {
   queryKey: ["history"],
   queryFn: getHistory,
-  select: (data: HistoryResponse) => data.games,
+  select: (data: HistoryResponse) =>
+    data.games.filter((game) => game.status !== "active"),
 };
 
 function getGameResult(game: HistoryGame) {
