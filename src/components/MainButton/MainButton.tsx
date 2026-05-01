@@ -8,6 +8,7 @@ import {
 import { MAX_BET_AMOUNT, VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 import type { BalanceResponse } from "../../types/api";
+import { formatCurrencyAmount } from "../../utils/currency";
 import "./MainButton.css";
 
 function getStartGameValidationError(
@@ -32,10 +33,6 @@ function getStartGameValidationError(
   }
 
   return null;
-}
-
-function formatCurrencyAmount(value: number) {
-  return value.toFixed(2);
 }
 
 export function MainButton() {
