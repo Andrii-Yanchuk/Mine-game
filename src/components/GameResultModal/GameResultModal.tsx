@@ -1,13 +1,6 @@
 import "./GameResultModal.css";
 import { useGameStore } from "../../store/gameStore";
-
-function formatCurrency(value: number) {
-  return `$${value.toFixed(2)}`;
-}
-
-function formatMultiplier(value: number) {
-  return `${value.toFixed(2)}x`;
-}
+import { formatCurrency, formatMultiplier } from "../../utils/currency";
 
 export function GameResultModal() {
   const gameResultModal = useGameStore((state) => state.gameResultModal);
@@ -20,20 +13,26 @@ export function GameResultModal() {
   }
 
   const isWin = gameResultModal.type === "win";
-  const title = isWin ? "Cashed Out!" : "Game Over";
-  const emoji = isWin ? "💎" : "💣";
+  const resultView = isWin
+    ? {
+        title: "Cashed Out!",
+        emoji: "💎",
+        profitClassName:
+          "game-result-modal__profit game-result-modal__profit--win",
+        profitLabel: `+${formatCurrency(gameResultModal.profit)} profit`,
+        buttonText: "PLAY AGAIN",
+      }
+    : {
+        title: "Busted!",
+        emoji: "💣",
+        profitClassName:
+          "game-result-modal__profit game-result-modal__profit--loss",
+        profitLabel: `${formatCurrency(Math.abs(gameResultModal.profit))} lost`,
+        buttonText: "TRY AGAIN",
+      };
   const modalClassName = `game-result-modal ${
     isWin ? "game-result-modal--win" : "game-result-modal--loss"
   }`;
-  const profitClassName =
-    gameResultModal.profit >= 0
-      ? "game-result-modal__profit game-result-modal__profit--win"
-      : "game-result-modal__profit game-result-modal__profit--loss";
-  const profitPrefix = gameResultModal.profit > 0 ? "+" : "";
-  const displayedProfit = isWin
-    ? gameResultModal.profit
-    : Math.abs(gameResultModal.profit);
-  const buttonText = isWin ? "PLAY AGAIN" : "TRY AGAIN";
 
   return (
     <div className="game-result-modal__overlay" role="presentation">
@@ -44,11 +43,11 @@ export function GameResultModal() {
         aria-labelledby="game-result-modal-title"
       >
         <div className="game-result-modal__emoji" aria-hidden="true">
-          {emoji}
+          {resultView.emoji}
         </div>
 
         <h2 id="game-result-modal-title" className="game-result-modal__title">
-          {isWin ? title : "Busted!"}
+          {resultView.title}
         </h2>
 
         {isWin && (
@@ -63,17 +62,14 @@ export function GameResultModal() {
           </>
         )}
 
-        <p className={profitClassName}>
-          {profitPrefix}
-          {formatCurrency(displayedProfit)} {isWin ? "profit" : "lost"}
-        </p>
+        <p className={resultView.profitClassName}>{resultView.profitLabel}</p>
 
         <button
           className="game-result-modal__button"
           onClick={closeGameResultModal}
           type="button"
         >
-          {buttonText}
+          {resultView.buttonText}
         </button>
       </div>
     </div>

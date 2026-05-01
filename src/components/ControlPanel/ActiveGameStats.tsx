@@ -1,3 +1,5 @@
+import { formatMultiplier } from "../../utils/currency";
+
 type ActiveGameStatsProps = {
   currentMultiplier: number;
   gemsFound: number;
@@ -18,7 +20,7 @@ export function ActiveGameStats({
       <div className="active-game__metric">
         <span className="active-game__label">Current Multiplier</span>
         <span className="active-game__value active-game__value--profit">
-          {currentMultiplier.toFixed(2)}x
+          {formatMultiplier(currentMultiplier)}
         </span>
       </div>
 
@@ -39,7 +41,7 @@ export function ActiveGameStats({
       <div className="active-game__metric active-game__metric--desktop-only">
         <span className="active-game__label">Next Multiplier</span>
         <span className="active-game__value active-game__value--muted">
-          {nextMultiplier.toFixed(2)}x
+          {formatMultiplier(nextMultiplier)}
         </span>
       </div>
     </div>
