@@ -1,5 +1,9 @@
 .main-button-wrapper {
-  width: 100%;
+  position: fixed;
+  right: 16px;
+  bottom: 26px;
+  left: 16px;
+  z-index: 100;
 }
 
 .main-button {
@@ -118,5 +122,12 @@
 
   40% {
     transform: translateY(-10px);
+  }
+}
+
+@media (min-width: 768px) {
+  .main-button-wrapper {
+    position: static;
+    width: 100%;
   }
 }

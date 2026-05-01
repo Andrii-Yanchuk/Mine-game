@@ -3,11 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "../../api/client";
 import { VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
+import { MainButton } from "../MainButton/MainButton";
 
 export function ControlPanel() {
   const betAmount = useGameStore((state) => state.betAmount);
   const minesCount = useGameStore((state) => state.minesCount);
   const currentMultiplier = useGameStore((state) => state.currentMultiplier);
+  const nextMultiplier = useGameStore((state) => state.nextMultiplier);
+  const gemsFound = useGameStore((state) => state.gemsFound);
   const isGameActive = useGameStore((state) => state.isGameActive);
   const setBetAmount = useGameStore((state) => state.setBetAmount);
   const setMinesCount = useGameStore((state) => state.setMinesCount);
@@ -18,9 +21,12 @@ export function ControlPanel() {
   });
   const balance = data?.balance;
   const profit = betAmount * currentMultiplier - betAmount;
-
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error</p>;
+  const balanceLabel = isLoading
+    ? "Loading..."
+    : isError
+      ? "Error"
+      : `💰 $${balance}`;
+  const totalGems = 25 - minesCount;
 
   return (
     <aside
@@ -30,7 +36,7 @@ export function ControlPanel() {
     >
       <div className="balance">
         <p className="balance__title">Balance</p>
-        <span className="balance__value">💰 ${balance}</span>
+        <span className="balance__value">{balanceLabel}</span>
       </div>
 
       <div className="bet">
@@ -107,10 +113,12 @@ export function ControlPanel() {
         </div>
       </div>
 
+      <MainButton />
+
       {isGameActive && (
         <div className="active-game">
           <div className="active-game__metric">
-            <span className="active-game__label">Multiplier</span>
+            <span className="active-game__label">Current Multiplier</span>
             <span className="active-game__value active-game__value--profit">
               {currentMultiplier.toFixed(2)}x
             </span>
@@ -120,6 +128,20 @@ export function ControlPanel() {
             <span className="active-game__label">Profit</span>
             <span className="active-game__value active-game__value--profit">
               +${profit.toFixed(2)}
+            </span>
+          </div>
+
+          <div className="active-game__metric active-game__metric--desktop-only">
+            <span className="active-game__label">Gems Found</span>
+            <span className="active-game__value">
+              {gemsFound} / {totalGems}
+            </span>
+          </div>
+
+          <div className="active-game__metric active-game__metric--desktop-only">
+            <span className="active-game__label">Next Multiplier</span>
+            <span className="active-game__value active-game__value--muted">
+              {nextMultiplier.toFixed(2)}x
             </span>
           </div>
         </div>

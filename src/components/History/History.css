@@ -88,3 +88,23 @@
   color: #94a3b8;
   font-size: 12px;
 }
+
+@media (min-width: 768px) {
+  .history {
+    max-width: 280px;
+    max-height: 686px;
+  }
+
+  .history-list {
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+    max-height: 631px;
+    padding-right: 4px;
+    padding-bottom: 0;
+  }
+
+  .history-card {
+    width: auto;
+  }
+}

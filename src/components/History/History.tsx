@@ -94,7 +94,7 @@ export function History() {
   })();
 
   return (
-    <div className="container">
+    <div className="container history">
       <h2 className="history-title">recent games</h2>
 
       <div className="history-list">{content}</div>

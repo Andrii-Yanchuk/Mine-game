@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cashOutGame, createGame, getBalance } from "../../api/client";
+import {
+  cashOutGame,
+  createGame,
+  getActiveGame,
+  getBalance,
+} from "../../api/client";
 import { VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 import type { BalanceResponse } from "../../types/api";
@@ -49,11 +54,21 @@ export function MainButton() {
 
   const createGameMutation = useMutation({
     mutationFn: createGame,
-    onSuccess: (game) => {
-      setActiveGame(game);
+    onSuccess: async (game) => {
       queryClient.setQueryData<BalanceResponse>(["balance"], {
         balance: game.balance,
       });
+
+      try {
+        const activeGame = await queryClient.fetchQuery({
+          queryKey: ["activeGame"],
+          queryFn: getActiveGame,
+        });
+
+        setActiveGame(activeGame ?? game);
+      } catch {
+        setActiveGame(game);
+      }
     },
   });
 

@@ -3,6 +3,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
+  width: 100%;
 }
 
 .grid__cell {
@@ -62,4 +63,12 @@
   color: #ef4444;
   font-size: 13px;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    width: min(100%, 508px);
+    margin-right: auto;
+    margin-left: auto;
+  }
 }

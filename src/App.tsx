@@ -5,17 +5,27 @@ import { ControlPanel } from "./components/ControlPanel/ControlPanel";
 import { GameResultModal } from "./components/GameResultModal/GameResultModal";
 import { GameProgress } from "./components/GameProgress/GameProgress";
 import { MinesGrid } from "./components/MinesGrid/MinesGrid";
-import { MainButton } from "./components/MainButton/MainButton";
 
 function App() {
   return (
-    <div>
+    <div className="app">
       <ActiveGameLoader />
-      <History />
-      <ControlPanel />
-      <GameProgress />
-      <MinesGrid />
-      <MainButton />
+
+      <div className="app__layout">
+        <aside className="app__panel">
+          <ControlPanel />
+        </aside>
+
+        <main className="app__game">
+          <GameProgress />
+          <MinesGrid />
+        </main>
+
+        <aside className="app__history">
+          <History />
+        </aside>
+      </div>
+
       <GameResultModal />
     </div>
   );
