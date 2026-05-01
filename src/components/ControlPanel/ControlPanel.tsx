@@ -1,7 +1,8 @@
 import "./ControlPanel.css";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBalance } from "../../api/client";
-import { VALID_MINES_COUNTS } from "../../constants/game";
+import { MAX_BET_AMOUNT, VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 import { MainButton } from "../MainButton/MainButton";
 
@@ -15,6 +16,12 @@ export function ControlPanel() {
   const setBetAmount = useGameStore((state) => state.setBetAmount);
   const setMinesCount = useGameStore((state) => state.setMinesCount);
 
+  const handleBetAmountChange = (value: string) => {
+    const normalizedValue = value.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+
+    setBetAmount(Number(normalizedValue) || 0);
+  };
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["balance"],
     queryFn: getBalance,
@@ -27,6 +34,20 @@ export function ControlPanel() {
       ? "Error"
       : `💰 $${balance}`;
   const totalGems = 25 - minesCount;
+  const maxBetAmount =
+    balance === undefined ? MAX_BET_AMOUNT : Math.min(balance, MAX_BET_AMOUNT);
+
+  useEffect(() => {
+    if (betAmount <= maxBetAmount) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setBetAmount(maxBetAmount);
+    }, 1000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [betAmount, maxBetAmount, setBetAmount]);
 
   return (
     <aside
@@ -46,10 +67,10 @@ export function ControlPanel() {
           <span className="bet__currency">$</span>
           <input
             className="bet__field"
-            type="number"
-            value={betAmount}
-            onChange={(e) => setBetAmount(Number(e.target.value) || 0)}
-            inputMode="none"
+            type="text"
+            value={String(betAmount)}
+            onChange={(e) => handleBetAmountChange(e.target.value)}
+            inputMode="numeric"
           />
         </div>
 
@@ -85,7 +106,7 @@ export function ControlPanel() {
           </button>
           <button
             className="bet__button"
-            onClick={() => setBetAmount(balance ?? 0)}
+            onClick={() => setBetAmount(maxBetAmount)}
             type="button"
           >
             Max

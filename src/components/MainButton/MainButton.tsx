@@ -5,12 +5,10 @@ import {
   getActiveGame,
   getBalance,
 } from "../../api/client";
-import { VALID_MINES_COUNTS } from "../../constants/game";
+import { MAX_BET_AMOUNT, VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 import type { BalanceResponse } from "../../types/api";
 import "./MainButton.css";
-
-const MAX_BET = 2500;
 
 function getStartGameValidationError(
   betAmount: number,
@@ -21,8 +19,8 @@ function getStartGameValidationError(
     return "Bet amount must be greater than 0.";
   }
 
-  if (betAmount > MAX_BET) {
-    return `Max bet is $${MAX_BET}.`;
+  if (betAmount > MAX_BET_AMOUNT) {
+    return `Max bet is $${MAX_BET_AMOUNT}.`;
   }
 
   if (balance !== undefined && betAmount > balance) {
