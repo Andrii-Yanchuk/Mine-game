@@ -22,7 +22,7 @@ export type GameResultModal =
       profit: number;
     };
 
-export type GameStore = {
+export type GameState = {
   betAmount: number;
   minesCount: number;
   gameId: string | null;
@@ -34,11 +34,15 @@ export type GameStore = {
   gemsFound: number;
   isGameActive: boolean;
   gameResultModal: GameResultModal | null;
+};
+
+export type GameActions = {
   setBetAmount: (betAmount: number) => void;
   setMinesCount: (minesCount: number) => void;
   setActiveGame: (game: ActiveGameResponse | CreateGameResponse) => void;
   setRevealResult: (result: RevealCellResponse) => void;
   setCashOutResult: (result: CashOutResponse) => void;
   closeGameResultModal: () => void;
-  clearGame: () => void;
 };
+
+export type GameStore = GameState & GameActions;
