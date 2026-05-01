@@ -1,12 +1,9 @@
 import "./GameProgress.css";
+import { BOARD_CELLS_COUNT } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 
-const BOARD_CELLS_COUNT = 25;
-
 export function GameProgress() {
-  const minesCount = useGameStore((state) => state.minesCount);
-  const gemsFound = useGameStore((state) => state.gemsFound);
-  const isGameActive = useGameStore((state) => state.isGameActive);
+  const { minesCount, gemsFound, isGameActive } = useGameStore();
   const remainingGems = BOARD_CELLS_COUNT - minesCount - gemsFound;
 
   if (!isGameActive) {
@@ -14,8 +11,10 @@ export function GameProgress() {
   }
 
   return (
-    <p className="game-progress">
-      {minesCount} Mines - {gemsFound} gems found - {remainingGems} remaining
-    </p>
+    <div className="game-progress">
+      <span>{minesCount} mines</span>
+      <span>{gemsFound} gems found</span>
+      <span>{remainingGems} remaining</span>
+    </div>
   );
 }
