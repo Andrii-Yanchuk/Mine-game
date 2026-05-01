@@ -34,6 +34,10 @@ function getStartGameValidationError(
   return null;
 }
 
+function formatCurrencyAmount(value: number) {
+  return value.toFixed(2);
+}
+
 export function MainButton() {
   const queryClient = useQueryClient();
   const betAmount = useGameStore((state) => state.betAmount);
@@ -53,6 +57,8 @@ export function MainButton() {
   const createGameMutation = useMutation({
     mutationFn: createGame,
     onSuccess: async (game) => {
+      setActiveGame(game);
+
       queryClient.setQueryData<BalanceResponse>(["balance"], {
         balance: game.balance,
       });
@@ -63,7 +69,9 @@ export function MainButton() {
           queryFn: getActiveGame,
         });
 
-        setActiveGame(activeGame ?? game);
+        if (activeGame) {
+          setActiveGame(activeGame);
+        }
       } catch {
         setActiveGame(game);
       }
@@ -120,7 +128,7 @@ export function MainButton() {
     : cashOutMutation.isPending
       ? "cashing out..."
     : isGameActive
-      ? `cash out - $${cashOutAmount.toFixed(2)}`
+      ? `cash out - $${formatCurrencyAmount(cashOutAmount)}`
       : "start game";
 
   return (

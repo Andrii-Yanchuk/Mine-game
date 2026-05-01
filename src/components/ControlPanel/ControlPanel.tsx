@@ -6,6 +6,24 @@ import { MAX_BET_AMOUNT, VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
 import { MainButton } from "../MainButton/MainButton";
 
+function formatCurrencyAmount(value: number) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
+function roundCurrencyAmount(value: number) {
+  return Math.round(value * 100) / 100;
+}
+
+function normalizeBetAmount(value: string) {
+  const normalizedValue = value
+    .replace(/[^\d.]/g, "")
+    .replace(/(\..*)\./g, "$1")
+    .replace(/^0+(?=\d)/, "")
+    .replace(/^(\d+\.?\d{0,2}).*$/, "$1");
+
+  return Number(normalizedValue) || 0;
+}
+
 export function ControlPanel() {
   const betAmount = useGameStore((state) => state.betAmount);
   const minesCount = useGameStore((state) => state.minesCount);
@@ -17,9 +35,7 @@ export function ControlPanel() {
   const setMinesCount = useGameStore((state) => state.setMinesCount);
 
   const handleBetAmountChange = (value: string) => {
-    const normalizedValue = value.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
-
-    setBetAmount(Number(normalizedValue) || 0);
+    setBetAmount(normalizeBetAmount(value));
   };
 
   const { data, isLoading, isError } = useQuery({
@@ -32,13 +48,14 @@ export function ControlPanel() {
     ? "Loading..."
     : isError
       ? "Error"
-      : `💰 $${balance}`;
+      : `💰 $${formatCurrencyAmount(balance ?? 0)}`;
   const totalGems = 25 - minesCount;
-  const maxBetAmount =
-    balance === undefined ? MAX_BET_AMOUNT : Math.min(balance, MAX_BET_AMOUNT);
+  const maxBetAmount = roundCurrencyAmount(
+    balance === undefined ? MAX_BET_AMOUNT : Math.min(balance, MAX_BET_AMOUNT),
+  );
 
   useEffect(() => {
-    if (betAmount <= maxBetAmount) {
+    if (isGameActive || betAmount <= maxBetAmount) {
       return;
     }
 
@@ -47,7 +64,7 @@ export function ControlPanel() {
     }, 1000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [betAmount, maxBetAmount, setBetAmount]);
+  }, [betAmount, isGameActive, maxBetAmount, setBetAmount]);
 
   return (
     <aside
@@ -68,9 +85,9 @@ export function ControlPanel() {
           <input
             className="bet__field"
             type="text"
-            value={String(betAmount)}
+            value={formatCurrencyAmount(betAmount)}
             onChange={(e) => handleBetAmountChange(e.target.value)}
-            inputMode="numeric"
+            inputMode="decimal"
           />
         </div>
 
