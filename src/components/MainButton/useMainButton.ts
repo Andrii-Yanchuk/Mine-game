@@ -5,6 +5,7 @@ import {
   getActiveGame,
   getBalance,
 } from "../../api/client";
+import { useGameSounds } from "../../hooks/useGameSounds";
 import { useGameStore } from "../../store/gameStore";
 import type { BalanceResponse } from "../../types/api";
 import { getStartGameValidationError } from "../../utils/gameValidation";
@@ -16,6 +17,7 @@ import {
 
 export function useMainButton() {
   const queryClient = useQueryClient();
+  const { playStartGameSound, playWinSound } = useGameSounds();
   const {
     betAmount,
     currentMultiplier,
@@ -59,6 +61,7 @@ export function useMainButton() {
   const cashOutMutation = useMutation({
     mutationFn: cashOutGame,
     onSuccess: (result) => {
+      playWinSound();
       setCashOutResult(result);
       queryClient.setQueryData<BalanceResponse>(["balance"], {
         balance: result.balance,
@@ -97,6 +100,7 @@ export function useMainButton() {
       return;
     }
 
+    playStartGameSound();
     createGameMutation.mutate({
       betAmount,
       minesCount,

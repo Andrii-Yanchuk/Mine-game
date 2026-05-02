@@ -1,4 +1,5 @@
 import { BET_AMOUNTS } from "../../constants/game";
+import { useGameSounds } from "../../hooks/useGameSounds";
 import { formatCurrencyAmount } from "../../utils/currency";
 
 type BetAmountControlProps = {
@@ -12,6 +13,13 @@ export function BetAmountControl({
   maxBetAmount,
   setBetAmount,
 }: BetAmountControlProps) {
+  const { playBetSound } = useGameSounds();
+
+  const selectBetAmount = (value: number) => {
+    playBetSound();
+    setBetAmount(value);
+  };
+
   return (
     <div className="bet">
       <p className="bet__title">BET AMOUNT</p>
@@ -36,7 +44,7 @@ export function BetAmountControl({
         {BET_AMOUNTS.map((value) => (
           <button
             key={value}
-            onClick={() => setBetAmount(value)}
+            onClick={() => selectBetAmount(value)}
             className={`bet__button ${
               value === betAmount ? "bet__button--active" : ""
             }`}
@@ -50,21 +58,21 @@ export function BetAmountControl({
       <div className="bet__quick-actions">
         <button
           className="bet__button"
-          onClick={() => setBetAmount(betAmount / 2)}
+          onClick={() => selectBetAmount(betAmount / 2)}
           type="button"
         >
           1/2
         </button>
         <button
           className="bet__button"
-          onClick={() => setBetAmount(betAmount * 2)}
+          onClick={() => selectBetAmount(betAmount * 2)}
           type="button"
         >
           x2
         </button>
         <button
           className="bet__button"
-          onClick={() => setBetAmount(maxBetAmount)}
+          onClick={() => selectBetAmount(maxBetAmount)}
           type="button"
         >
           Max

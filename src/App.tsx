@@ -5,6 +5,7 @@ import { ControlPanel } from "./components/ControlPanel/ControlPanel";
 import { GameResultModal } from "./components/GameResultModal/GameResultModal";
 import { GameProgress } from "./components/GameProgress/GameProgress";
 import { MinesGrid } from "./components/MinesGrid/MinesGrid";
+import { SoundToggle } from "./components/SoundToggle/SoundToggle";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
         </main>
 
         <aside className="app__history">
+          <div className="app__history-header">
+            <SoundToggle />
+          </div>
           <History />
         </aside>
       </div>

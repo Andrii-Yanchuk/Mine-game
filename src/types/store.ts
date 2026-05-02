@@ -33,6 +33,7 @@ export type GameState = {
   fullBoard: FullBoard | null;
   gemsFound: number;
   isGameActive: boolean;
+  isSoundEnabled: boolean;
   gameResultModal: GameResultModal | null;
 };
 
@@ -42,6 +43,7 @@ export type GameActions = {
   setActiveGame: (game: ActiveGameResponse | CreateGameResponse) => void;
   setRevealResult: (result: RevealCellResponse) => void;
   setCashOutResult: (result: CashOutResponse) => void;
+  toggleSound: () => void;
   closeGameResultModal: () => void;
 };
 

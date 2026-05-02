@@ -21,6 +21,12 @@
   order: 1;
 }
 
+.app__history-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
 @media (min-width: 768px) {
   .app {
     min-height: 100svh;
@@ -55,5 +61,9 @@
   .app__panel,
   .app__history {
     width: min(100%, 280px);
+  }
+
+  .app__history-header {
+    margin-bottom: 10px;
   }
 }

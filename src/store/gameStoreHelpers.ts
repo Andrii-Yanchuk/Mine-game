@@ -17,6 +17,7 @@ export const initialGameState: GameState = {
   fullBoard: null,
   gemsFound: 0,
   isGameActive: false,
+  isSoundEnabled: true,
   gameResultModal: null,
 };
 

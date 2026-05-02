@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { revealCell } from "../../api/client";
 import { BOARD_CELLS_COUNT } from "../../constants/game";
+import { useGameSounds } from "../../hooks/useGameSounds";
 import { useGameStore } from "../../store/gameStore";
 import {
   getGridCellPosition,
@@ -13,6 +14,7 @@ import {
 export function useMinesGrid() {
   const [pendingCell, setPendingCell] = useState<GridCellPosition | null>(null);
   const queryClient = useQueryClient();
+  const { playCardFlipSound, playLoseSound } = useGameSounds();
   const {
     fullBoard,
     gameId,
@@ -38,6 +40,12 @@ export function useMinesGrid() {
       setPendingCell({ row, col });
     },
     onSuccess: (result, revealedCell) => {
+      playCardFlipSound();
+
+      if (result.status === "lost") {
+        playLoseSound();
+      }
+
       setRevealResult({
         ...result,
         revealedCells: getNextRevealedCells({

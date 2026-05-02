@@ -1,4 +1,5 @@
 import { VALID_MINES_COUNTS } from "../../constants/game";
+import { useGameSounds } from "../../hooks/useGameSounds";
 
 type MinesControlProps = {
   minesCount: number;
@@ -11,6 +12,13 @@ export function MinesControl({
   isGameActive,
   setMinesCount,
 }: MinesControlProps) {
+  const { playBetSound } = useGameSounds();
+
+  const selectMinesCount = (value: number) => {
+    playBetSound();
+    setMinesCount(value);
+  };
+
   return (
     <div className="mines">
       <p className="mines__title">MINES</p>
@@ -19,7 +27,7 @@ export function MinesControl({
         {VALID_MINES_COUNTS.map((value) => (
           <button
             key={value}
-            onClick={() => setMinesCount(value)}
+            onClick={() => selectMinesCount(value)}
             disabled={isGameActive}
             className={`mines__button ${
               value === minesCount ? "mines__button--active" : ""
