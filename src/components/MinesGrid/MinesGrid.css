@@ -8,16 +8,16 @@
 
 .grid__cell {
   aspect-ratio: 1 / 1;
+  padding: 0;
   border-radius: 12px;
-  border: 1px solid #252d3f;
-  background: #1a1f2e;
+  border: 0;
+  background: transparent;
 
   cursor: pointer;
   color: #ffffff;
   font-size: 24px;
-  display: grid;
-  place-items: center;
-  transition: 0.2s;
+  perspective: 700px;
+  transition: filter 0.2s, transform 0.2s;
 }
 
 .grid__cell:hover {
@@ -25,13 +25,48 @@
   filter: brightness(1.1);
 }
 
-.grid__cell--gem {
+.grid__cell-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.36s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.grid__cell--gem .grid__cell-inner,
+.grid__cell--bomb .grid__cell-inner {
+  transform: rotateY(180deg);
+}
+
+.grid__cell-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  backface-visibility: hidden;
+}
+
+.grid__cell-face--front {
+  border: 1px solid #252d3f;
+  background: #1a1f2e;
+}
+
+.grid__cell-face--back {
+  border: 1px solid #252d3f;
+  background: #1a1f2e;
+  transform: rotateY(180deg);
+}
+
+.grid__cell--gem .grid__cell-face--back {
+  border-color: #22c55e;
   background: #052e16;
-  border: 1px solid #22c55e;
   box-shadow: 0 0 20px 0 rgb(34 197 94 / 30%);
 }
 
-.grid__cell--bomb {
+.grid__cell--bomb .grid__cell-face--back {
+  border-color: #ef4444;
   background: #ef4444;
 }
 
@@ -70,5 +105,12 @@
     width: min(100%, 508px);
     margin-right: auto;
     margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid__cell,
+  .grid__cell-inner {
+    transition: none;
   }
 }

@@ -16,11 +16,17 @@ export function MinesGrid() {
             onClick={() => revealGridCell(index)}
             type="button"
           >
-            {isLoading ? (
-              <span className="grid__spinner" aria-hidden="true" />
-            ) : (
-              contentType ? GRID_CELL_CONTENT[contentType] : null
-            )}
+            <span className="grid__cell-inner">
+              <span className="grid__cell-face grid__cell-face--front">
+                {isLoading ? (
+                  <span className="grid__spinner" aria-hidden="true" />
+                ) : null}
+              </span>
+
+              <span className="grid__cell-face grid__cell-face--back">
+                {contentType ? GRID_CELL_CONTENT[contentType] : null}
+              </span>
+            </span>
           </button>
         ))}
       </div>
