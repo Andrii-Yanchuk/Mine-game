@@ -19,7 +19,10 @@ export function ActiveGameStats({
     <div className="active-game">
       <div className="active-game__metric">
         <span className="active-game__label">Current Multiplier</span>
-        <span className="active-game__value active-game__value--profit">
+        <span
+          key={currentMultiplier}
+          className="active-game__value active-game__value--profit active-game__value--multiplier"
+        >
           {formatMultiplier(currentMultiplier)}
         </span>
       </div>
