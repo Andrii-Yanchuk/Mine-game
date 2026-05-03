@@ -1,8 +1,9 @@
 import "./MainButton.css";
+import { memo } from "react";
 import { StartGameLoader } from "./StartGameLoader";
 import { useMainButton } from "./useMainButton";
 
-export function MainButton() {
+function MainButtonComponent() {
   const {
     errorMessage,
     isCashOutMode,
@@ -31,3 +32,5 @@ export function MainButton() {
     </div>
   );
 }
+
+export const MainButton = memo(MainButtonComponent);

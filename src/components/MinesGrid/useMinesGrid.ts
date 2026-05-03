@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useShallow } from "zustand/react/shallow";
 import { revealCell } from "../../api/client";
 import { BOARD_CELLS_COUNT } from "../../constants/game";
 import { useGameSounds } from "../../hooks/useGameSounds";
@@ -21,7 +22,15 @@ export function useMinesGrid() {
     isGameActive,
     revealedCells,
     setRevealResult,
-  } = useGameStore();
+  } = useGameStore(
+    useShallow((state) => ({
+      fullBoard: state.fullBoard,
+      gameId: state.gameId,
+      isGameActive: state.isGameActive,
+      revealedCells: state.revealedCells,
+      setRevealResult: state.setRevealResult,
+    })),
+  );
 
   const syncFinishedGameQueries = (balance?: number) => {
     if (typeof balance === "number") {

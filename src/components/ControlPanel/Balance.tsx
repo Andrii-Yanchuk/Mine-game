@@ -1,8 +1,10 @@
+import { memo } from "react";
+
 type BalanceProps = {
   balanceLabel: string;
 };
 
-export function Balance({ balanceLabel }: BalanceProps) {
+function BalanceComponent({ balanceLabel }: BalanceProps) {
   return (
     <div className="balance">
       <p className="balance__title">Balance</p>
@@ -10,3 +12,5 @@ export function Balance({ balanceLabel }: BalanceProps) {
     </div>
   );
 }
+
+export const Balance = memo(BalanceComponent);

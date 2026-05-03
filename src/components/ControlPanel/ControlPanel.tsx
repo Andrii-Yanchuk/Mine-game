@@ -1,6 +1,7 @@
 import "./ControlPanel.css";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useShallow } from "zustand/react/shallow";
 import { getBalance } from "../../api/client";
 import { MAX_BET_AMOUNT } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
@@ -21,7 +22,18 @@ export function ControlPanel() {
     isGameActive,
     setBetAmount,
     setMinesCount,
-  } = useGameStore();
+  } = useGameStore(
+    useShallow((state) => ({
+      betAmount: state.betAmount,
+      minesCount: state.minesCount,
+      currentMultiplier: state.currentMultiplier,
+      nextMultiplier: state.nextMultiplier,
+      gemsFound: state.gemsFound,
+      isGameActive: state.isGameActive,
+      setBetAmount: state.setBetAmount,
+      setMinesCount: state.setMinesCount,
+    })),
+  );
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["balance"],

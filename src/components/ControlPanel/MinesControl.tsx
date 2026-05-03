@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { VALID_MINES_COUNTS } from "../../constants/game";
 import { useGameSounds } from "../../hooks/useGameSounds";
 
@@ -7,7 +8,7 @@ type MinesControlProps = {
   setMinesCount: (minesCount: number) => void;
 };
 
-export function MinesControl({
+function MinesControlComponent({
   minesCount,
   isGameActive,
   setMinesCount,
@@ -41,3 +42,5 @@ export function MinesControl({
     </div>
   );
 }
+
+export const MinesControl = memo(MinesControlComponent);

@@ -1,9 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useShallow } from "zustand/react/shallow";
 import {
   cashOutGame,
   createGame,
   getActiveGame,
-  getBalance,
 } from "../../api/client";
 import { useGameSounds } from "../../hooks/useGameSounds";
 import { useGameStore } from "../../store/gameStore";
@@ -13,26 +14,30 @@ import {
   getIsMainButtonDisabled,
   getMainButtonError,
   getMainButtonTitle,
+  type MainButtonState,
 } from "./mainButtonState";
 
 export function useMainButton() {
   const queryClient = useQueryClient();
   const { playStartGameSound, playWinSound } = useGameSounds();
+  const [validationError, setValidationError] = useState<string | null>(null);
   const {
-    betAmount,
     currentMultiplier,
     gameId,
     isGameActive,
-    minesCount,
     revealedCells,
     setActiveGame,
     setCashOutResult,
-  } = useGameStore();
-
-  const { data: balanceData } = useQuery({
-    queryKey: ["balance"],
-    queryFn: getBalance,
-  });
+  } = useGameStore(
+    useShallow((state) => ({
+      currentMultiplier: state.currentMultiplier,
+      gameId: state.gameId,
+      isGameActive: state.isGameActive,
+      revealedCells: state.revealedCells,
+      setActiveGame: state.setActiveGame,
+      setCashOutResult: state.setCashOutResult,
+    })),
+  );
 
   const createGameMutation = useMutation({
     mutationFn: createGame,
@@ -70,14 +75,9 @@ export function useMainButton() {
     },
   });
 
-  const validationError = getStartGameValidationError({
-    betAmount,
-    balance: balanceData?.balance,
-  });
-
-  const mainButtonState = {
+  const mainButtonState: MainButtonState = {
     canCashOut: revealedCells.length > 0,
-    cashOutAmount: betAmount * currentMultiplier,
+    cashOutAmount: useGameStore.getState().betAmount * currentMultiplier,
     cashOutError: cashOutMutation.error?.message,
     createGameError: createGameMutation.error?.message,
     gameId,
@@ -96,10 +96,21 @@ export function useMainButton() {
       return;
     }
 
-    if (validationError) {
+    const { betAmount, minesCount } = useGameStore.getState();
+    const balance = queryClient.getQueryData<BalanceResponse>(["balance"])
+      ?.balance;
+    const nextValidationError = getStartGameValidationError({
+      betAmount,
+      balance,
+    });
+
+    if (nextValidationError) {
+      setValidationError(nextValidationError);
+
       return;
     }
 
+    setValidationError(null);
     playStartGameSound();
     createGameMutation.mutate({
       betAmount,
