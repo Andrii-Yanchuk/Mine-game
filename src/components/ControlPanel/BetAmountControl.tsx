@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { BET_AMOUNTS } from "../../constants/game";
 import { useGameSounds } from "../../hooks/useGameSounds";
 import { formatCurrencyAmount } from "../../utils/currency";
@@ -9,7 +10,7 @@ type BetAmountControlProps = {
   setBetAmount: (betAmount: number) => void;
 };
 
-export function BetAmountControl({
+function BetAmountControlComponent({
   betAmount,
   isGameActive,
   maxBetAmount,
@@ -92,3 +93,5 @@ export function BetAmountControl({
     </div>
   );
 }
+
+export const BetAmountControl = memo(BetAmountControlComponent);
