@@ -62,6 +62,7 @@ export function ControlPanel() {
 
       <BetAmountControl
         betAmount={betAmount}
+        isGameActive={isGameActive}
         maxBetAmount={maxBetAmount}
         setBetAmount={setBetAmount}
       />

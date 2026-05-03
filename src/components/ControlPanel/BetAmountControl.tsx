@@ -4,18 +4,24 @@ import { formatCurrencyAmount } from "../../utils/currency";
 
 type BetAmountControlProps = {
   betAmount: number;
+  isGameActive: boolean;
   maxBetAmount: number;
   setBetAmount: (betAmount: number) => void;
 };
 
 export function BetAmountControl({
   betAmount,
+  isGameActive,
   maxBetAmount,
   setBetAmount,
 }: BetAmountControlProps) {
   const { playBetSound } = useGameSounds();
 
   const selectBetAmount = (value: number) => {
+    if (isGameActive) {
+      return;
+    }
+
     playBetSound();
     setBetAmount(value);
   };
@@ -37,6 +43,7 @@ export function BetAmountControl({
           }}
           min={0}
           step={0.01}
+          disabled={isGameActive}
         />
       </div>
 
@@ -45,6 +52,7 @@ export function BetAmountControl({
           <button
             key={value}
             onClick={() => selectBetAmount(value)}
+            disabled={isGameActive}
             className={`bet__button ${
               value === betAmount ? "bet__button--active" : ""
             }`}
@@ -59,6 +67,7 @@ export function BetAmountControl({
         <button
           className="bet__button"
           onClick={() => selectBetAmount(betAmount / 2)}
+          disabled={isGameActive}
           type="button"
         >
           1/2
@@ -66,6 +75,7 @@ export function BetAmountControl({
         <button
           className="bet__button"
           onClick={() => selectBetAmount(betAmount * 2)}
+          disabled={isGameActive}
           type="button"
         >
           x2
@@ -73,6 +83,7 @@ export function BetAmountControl({
         <button
           className="bet__button"
           onClick={() => selectBetAmount(maxBetAmount)}
+          disabled={isGameActive}
           type="button"
         >
           Max

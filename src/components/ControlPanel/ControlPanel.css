@@ -102,12 +102,18 @@
   filter: brightness(1.1);
 }
 
+.bet__button:disabled,
 .mines__button:disabled {
   cursor: default;
 }
 
+.bet__button:disabled:hover,
 .mines__button:disabled:hover {
   filter: none;
+}
+
+.bet__field:disabled {
+  color: #8995aa;
 }
 
 .bet__button--active,
