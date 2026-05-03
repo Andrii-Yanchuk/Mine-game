@@ -1,11 +1,10 @@
 import "./App.css";
 import { ActiveGameLoader } from "./components/ActiveGameLoader/ActiveGameLoader";
-import { History } from "./components/History/History";
+import { HistoryPanel } from "./components/History/HistoryPanel";
 import { ControlPanel } from "./components/ControlPanel/ControlPanel";
 import { GameResultModal } from "./components/GameResultModal/GameResultModal";
 import { GameProgress } from "./components/GameProgress/GameProgress";
 import { MinesGrid } from "./components/MinesGrid/MinesGrid";
-import { SoundToggle } from "./components/SoundToggle/SoundToggle";
 
 function App() {
   return (
@@ -22,12 +21,7 @@ function App() {
           <MinesGrid />
         </main>
 
-        <aside className="app__history">
-          <div className="app__history-header">
-            <SoundToggle />
-          </div>
-          <History />
-        </aside>
+        <HistoryPanel />
       </div>
 
       <GameResultModal />
