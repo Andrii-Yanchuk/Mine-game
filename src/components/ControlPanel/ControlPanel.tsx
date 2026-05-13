@@ -3,14 +3,39 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useShallow } from "zustand/react/shallow";
 import { getBalance } from "../../api/client";
-import { MAX_BET_AMOUNT } from "../../constants/game";
+import { BOARD_CELLS_COUNT, MAX_BET_AMOUNT } from "../../constants/game";
 import { useGameStore } from "../../store/gameStore";
-import { formatCurrencyAmount } from "../../utils/currency";
+import {
+  formatCurrencyAmount,
+  formatTwoDecimalPlaces,
+} from "../../utils/currency";
 import { ActiveGameStats } from "./ActiveGameStats";
 import { Balance } from "./Balance";
 import { BetAmountControl } from "./BetAmountControl";
 import { MinesControl } from "./MinesControl";
 import { MainButton } from "../MainButton/MainButton";
+
+type BalanceLabelState = {
+  balance?: number;
+  isError: boolean;
+  isLoading: boolean;
+};
+
+function getBalanceLabel({
+  balance,
+  isError,
+  isLoading,
+}: BalanceLabelState) {
+  if (isLoading) {
+    return "Loading...";
+  }
+
+  if (isError) {
+    return "Error";
+  }
+
+  return `💰 $${formatCurrencyAmount(balance ?? 0, { trimInteger: true })}`;
+}
 
 export function ControlPanel() {
   const {
@@ -42,14 +67,10 @@ export function ControlPanel() {
   const balance = data?.balance;
   const availableMaxBet = balance ?? MAX_BET_AMOUNT;
   const profit = betAmount * currentMultiplier - betAmount;
-  const balanceLabel = isLoading
-    ? "Loading..."
-    : isError
-      ? "Error"
-      : `💰 $${formatCurrencyAmount(balance ?? 0, { trimInteger: true })}`;
-  const totalGems = 25 - minesCount;
+  const balanceLabel = getBalanceLabel({ balance, isError, isLoading });
+  const totalGems = BOARD_CELLS_COUNT - minesCount;
   const maxBetAmount = Number(
-    Math.min(availableMaxBet, MAX_BET_AMOUNT).toFixed(2),
+    formatTwoDecimalPlaces(Math.min(availableMaxBet, MAX_BET_AMOUNT)),
   );
 
   useEffect(() => {

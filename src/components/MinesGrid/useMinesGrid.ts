@@ -9,8 +9,8 @@ import {
   getGridCellPosition,
   getGridCellView,
   getNextRevealedCells,
-  type GridCellPosition,
 } from "./minesGridHelpers";
+import type { GridCellPosition } from "./minesGridTypes";
 
 export function useMinesGrid() {
   const [pendingCell, setPendingCell] = useState<GridCellPosition | null>(null);

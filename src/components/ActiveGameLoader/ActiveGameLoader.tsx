@@ -1,5 +1,4 @@
 import "./ActiveGameLoader.css";
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveGame } from "../../api/client";
 import { useGameStore } from "../../store/gameStore";
@@ -7,17 +6,19 @@ import { useGameStore } from "../../store/gameStore";
 export function ActiveGameLoader() {
   const setActiveGame = useGameStore((state) => state.setActiveGame);
 
-  const { data: activeGame, isPending } = useQuery({
+  const { isPending } = useQuery({
     queryKey: ["activeGame"],
-    queryFn: getActiveGame,
+    queryFn: async () => {
+      const activeGame = await getActiveGame();
+
+      if (activeGame) {
+        setActiveGame(activeGame);
+      }
+
+      return activeGame;
+    },
     retry: false,
   });
-
-  useEffect(() => {
-    if (activeGame) {
-      setActiveGame(activeGame);
-    }
-  }, [activeGame, setActiveGame]);
 
   if (!isPending) {
     return null;

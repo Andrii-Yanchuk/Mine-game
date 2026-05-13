@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, type ChangeEvent } from "react";
 import { BET_AMOUNTS } from "../../constants/game";
 import { useGameSounds } from "../../hooks/useGameSounds";
 import { formatCurrencyAmount } from "../../utils/currency";
@@ -27,6 +27,12 @@ function BetAmountControlComponent({
     setBetAmount(value);
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.valueAsNumber;
+
+    setBetAmount(Number.isNaN(value) ? 0 : value);
+  };
+
   return (
     <div className="bet">
       <p className="bet__title">BET AMOUNT</p>
@@ -37,11 +43,7 @@ function BetAmountControlComponent({
           className="bet__field"
           type="number"
           value={formatCurrencyAmount(betAmount, { trimInteger: true })}
-          onChange={(e) => {
-            const value = e.currentTarget.valueAsNumber;
-
-            setBetAmount(Number.isNaN(value) ? 0 : value);
-          }}
+          onChange={handleInputChange}
           min={0}
           step={0.01}
           disabled={isGameActive}

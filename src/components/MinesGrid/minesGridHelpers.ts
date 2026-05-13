@@ -1,37 +1,10 @@
 import { BOARD_SIZE } from "../../constants/game";
+import type { RevealCellResponse } from "../../types/api";
 import type {
-  FullBoard,
-  RevealCellPayload,
-  RevealCellResponse,
-  RevealedCell,
-} from "../../types/api";
-
-export type GridCellPosition = {
-  col: number;
-  row: number;
-};
-
-export type GridCellContentType = "bomb" | "gem";
-
-export const GRID_CELL_CONTENT = {
-  bomb: "💣",
-  gem: "💎",
-};
-
-type GridCellViewParams = {
-  fullBoard: FullBoard | null;
-  index: number;
-  isGameActive: boolean;
-  isRevealPending: boolean;
-  pendingCell: GridCellPosition | null;
-  revealedCells: RevealedCell[];
-};
-
-type NextRevealedCellsParams = {
-  result: RevealCellResponse;
-  revealedCell: RevealCellPayload;
-  revealedCells: RevealedCell[];
-};
+  GridCellPosition,
+  GridCellViewParams,
+  NextRevealedCellsParams,
+} from "./minesGridTypes";
 
 export function getGridCellPosition(index: number): GridCellPosition {
   return {
@@ -57,7 +30,10 @@ export function getGridCellView({
   const isLoading =
     pendingCell?.row === position.row && pendingCell?.col === position.col;
   const isDisabled =
-    !isGameActive || isRevealPending || Boolean(revealedCell) || Boolean(fullBoard);
+    !isGameActive ||
+    isRevealPending ||
+    Boolean(revealedCell) ||
+    Boolean(fullBoard);
   const className = [
     "grid__cell",
     revealedCell ? `grid__cell--${revealedCell.type}` : "",

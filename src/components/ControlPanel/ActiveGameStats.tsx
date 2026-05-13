@@ -1,4 +1,4 @@
-import { formatMultiplier } from "../../utils/currency";
+import { formatCurrencyAmount, formatMultiplier } from "../../utils/currency";
 
 type ActiveGameStatsProps = {
   currentMultiplier: number;
@@ -30,7 +30,7 @@ export function ActiveGameStats({
       <div className="active-game__metric">
         <span className="active-game__label">Profit</span>
         <span className="active-game__value active-game__value--profit">
-          +${profit.toFixed(2)}
+          +${formatCurrencyAmount(profit)}
         </span>
       </div>
 

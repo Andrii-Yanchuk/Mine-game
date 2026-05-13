@@ -2,6 +2,10 @@ type FormatCurrencyAmountOptions = {
   trimInteger?: boolean;
 };
 
+export function formatTwoDecimalPlaces(value: number) {
+  return value.toFixed(2);
+}
+
 export function formatCurrencyAmount(
   value: number,
   options: FormatCurrencyAmountOptions = {},
@@ -10,7 +14,7 @@ export function formatCurrencyAmount(
     return String(value);
   }
 
-  return value.toFixed(2);
+  return formatTwoDecimalPlaces(value);
 }
 
 export function formatCurrency(value: number) {
@@ -18,5 +22,5 @@ export function formatCurrency(value: number) {
 }
 
 export function formatMultiplier(value: number) {
-  return `${value.toFixed(2)}x`;
+  return `${formatTwoDecimalPlaces(value)}x`;
 }

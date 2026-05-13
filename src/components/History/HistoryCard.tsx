@@ -26,6 +26,10 @@ function formatHistoryProfit(profit: number) {
 export function HistoryCard({ game }: HistoryCardProps) {
   const isLoss = game.status === "lost";
   const profit = getHistoryGameProfit(game);
+  const multiplierClassName = `history_multiplier ${
+    isLoss ? "history_multiplier--bomb" : ""
+  }`;
+  const multiplierLabel = isLoss ? "💣" : formatMultiplier(game.multiplier);
 
   return (
     <div
@@ -35,13 +39,7 @@ export function HistoryCard({ game }: HistoryCardProps) {
       <div className="history-card_top">
         <p className="history_bet">{formatCurrency(game.betAmount)}</p>
 
-        {isLoss ? (
-          <p className="history_multiplier history_multiplier--bomb">💣</p>
-        ) : (
-          <p className="history_multiplier">
-            {formatMultiplier(game.multiplier)}
-          </p>
-        )}
+        <p className={multiplierClassName}>{multiplierLabel}</p>
       </div>
 
       <div className="history-card_bottom">

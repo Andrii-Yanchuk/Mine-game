@@ -1,5 +1,5 @@
 import "./MinesGrid.css";
-import { GRID_CELL_CONTENT } from "./minesGridHelpers";
+import { GRID_CELL_CONTENT } from "./minesGridConstants";
 import { useMinesGrid } from "./useMinesGrid";
 
 export function MinesGrid() {
