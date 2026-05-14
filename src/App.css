@@ -2,6 +2,7 @@
   width: 100%;
   padding: 16px 16px 92px;
   box-sizing: border-box;
+  background: #0e1119;
 }
 
 .app__layout {
@@ -40,7 +41,7 @@
     grid-template-columns: minmax(180px, 280px) minmax(320px, 508px) minmax(
         180px,
         280px
-    );
+      );
     gap: 16px;
     align-items: center;
     justify-content: center;
