@@ -1,0 +1,116 @@
+.grid {
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.grid__cell {
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 24px;
+  perspective: 700px;
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.grid__cell:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.grid__cell-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.36s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.grid__cell--gem .grid__cell-inner,
+.grid__cell--bomb .grid__cell-inner {
+  transform: rotateY(180deg);
+}
+
+.grid__cell-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  backface-visibility: hidden;
+}
+
+.grid__cell-face--front {
+  border: 1px solid #252d3f;
+  background: #1a1f2e;
+}
+
+.grid__cell-face--back {
+  border: 1px solid #252d3f;
+  background: #1a1f2e;
+  transform: rotateY(180deg);
+}
+
+.grid__cell--gem .grid__cell-face--back {
+  border-color: #22c55e;
+  background: #052e16;
+  box-shadow: 0 0 20px 0 rgb(34 197 94 / 30%);
+}
+
+.grid__cell--bomb .grid__cell-face--back {
+  border-color: #ef4444;
+  background: #ef4444;
+}
+
+.grid__cell--disabled {
+  pointer-events: none;
+}
+
+.grid__cell--loading {
+  opacity: 0.55;
+}
+
+.grid__spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgb(255 255 255 / 25%);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: grid-spinner 0.8s linear infinite;
+}
+
+@keyframes grid-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.grid__error {
+  margin: 0 0 12px;
+  color: #ef4444;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    width: min(100%, 508px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid__cell,
+  .grid__cell-inner {
+    transition: none;
+  }
+}

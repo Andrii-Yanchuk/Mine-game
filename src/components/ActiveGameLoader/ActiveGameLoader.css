@@ -1,0 +1,67 @@
+.app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: #0e1119;
+}
+
+.app-loader__content {
+  display: grid;
+  justify-items: center;
+}
+
+.app-loader__dots {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.app-loader__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  animation: app-loader-bounce 0.8s ease-in-out infinite;
+}
+
+.app-loader__dot--blue {
+  background: #3b82f6;
+}
+
+.app-loader__dot--green {
+  background: #22c55e;
+  animation-delay: 0.12s;
+}
+
+.app-loader__dot--yellow {
+  background: #fbbf24;
+  animation-delay: 0.24s;
+}
+
+.app-loader__title {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.app-loader__text {
+  margin: 0;
+  color: #7a8599;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@keyframes app-loader-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px);
+  }
+}

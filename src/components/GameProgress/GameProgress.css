@@ -1,0 +1,16 @@
+.game-progress {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  color: #596375;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.game-progress span + span::before {
+  content: "•";
+  margin-right: 12px;
+}

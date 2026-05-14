@@ -1,0 +1,70 @@
+.app {
+  width: 100%;
+  padding: 16px 16px 92px;
+  box-sizing: border-box;
+  background: #0e1119;
+}
+
+.app__layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.app__panel {
+  order: 2;
+}
+
+.app__game {
+  order: 3;
+}
+
+.app__history {
+  order: 1;
+}
+
+.app__history-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+  .app {
+    min-height: 100svh;
+    padding: 24px 0;
+    display: grid;
+    align-items: center;
+  }
+
+  .app__layout {
+    display: grid;
+    grid-template-columns: minmax(180px, 280px) minmax(320px, 508px) minmax(
+        180px,
+        280px
+      );
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app__panel,
+  .app__game,
+  .app__history {
+    order: initial;
+    min-width: 0;
+  }
+
+  .app__game {
+    justify-self: center;
+    width: min(100%, 508px);
+  }
+
+  .app__panel,
+  .app__history {
+    width: min(100%, 280px);
+  }
+
+  .app__history-header {
+    margin-bottom: 10px;
+  }
+}
